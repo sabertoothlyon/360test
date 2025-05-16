@@ -1,27 +1,66 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8">
+    <title>Train Car Virtual Tour</title>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   </head>
   <body>
     <a-scene>
+      <!-- 360 Background Image -->
       <a-sky id="sky" src="traincar1.jpg" rotation="0 -90 0"></a-sky>
 
-      <a-entity id="hotspot"
+      <!-- Navigation Hotspot (to next car image) -->
+      <a-entity id="nav-hotspot"
                 geometry="primitive: sphere; radius: 0.2"
                 material="color: red"
                 position="2 1 -3">
       </a-entity>
+
+      <!-- Detail View Hotspot (blue sphere on control panel) -->
+      <a-entity id="panel-hotspot"
+                geometry="primitive: sphere; radius: 0.1"
+                material="color: blue"
+                position="1 1.4 -2">
+      </a-entity>
+
+      <!-- Detail Panel Image (Initially Hidden) -->
+      <a-image id="detail-panel"
+               src="controlpanel.jpg"
+               position="0 1.6 -1.5"
+               width="1.5"
+               height="1"
+               visible="false">
+      </a-image>
+
+      <!-- Optional Camera + Cursor for interaction -->
+      <a-entity camera look-controls>
+        <a-entity cursor="fuse: false; rayOrigin: mouse"
+                  raycaster="objects: [id^=hotspot], a-image, a-entity"
+                  position="0 0 -1"
+                  geometry="primitive: ring; radiusInner: 0.01; radiusOuter: 0.02"
+                  material="color: white; shader: flat">
+        </a-entity>
+      </a-entity>
     </a-scene>
 
+    <!-- Interactivity Script -->
     <script>
-      // Wait for the scene to load before attaching the event
       window.addEventListener('DOMContentLoaded', function () {
-        const hotspot = document.querySelector('#hotspot');
+        const navHotspot = document.querySelector('#nav-hotspot');
+        const panelHotspot = document.querySelector('#panel-hotspot');
+        const detailPanel = document.querySelector('#detail-panel');
         const sky = document.querySelector('#sky');
 
-        hotspot.addEventListener('click', function () {
+        // Click to switch 360 background to next car image
+        navHotspot.addEventListener('click', function () {
           sky.setAttribute('src', 'traincar2.jpg');
+        });
+
+        // Click to show/hide the close-up detail image
+        panelHotspot.addEventListener('click', function () {
+          const isVisible = detailPanel.getAttribute('visible');
+          detailPanel.setAttribute('visible', !isVisible);
         });
       });
     </script>
