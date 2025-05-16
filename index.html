@@ -5,12 +5,25 @@
   </head>
   <body>
     <a-scene>
-      <a-sky src="traincar1.jpg" rotation="0 -90 0"></a-sky>
-      <a-entity geometry="primitive: sphere; radius: 0.2"
+      <a-sky id="sky" src="traincar1.jpg" rotation="0 -90 0"></a-sky>
+
+      <a-entity id="hotspot"
+                geometry="primitive: sphere; radius: 0.2"
                 material="color: red"
-                position="2 1 -3"
-                event-set__click="_event: click; _target: a-sky; src: traincar2.jpg">
+                position="2 1 -3">
       </a-entity>
     </a-scene>
+
+    <script>
+      // Wait for the scene to load before attaching the event
+      window.addEventListener('DOMContentLoaded', function () {
+        const hotspot = document.querySelector('#hotspot');
+        const sky = document.querySelector('#sky');
+
+        hotspot.addEventListener('click', function () {
+          sky.setAttribute('src', 'traincar2.jpg');
+        });
+      });
+    </script>
   </body>
 </html>
